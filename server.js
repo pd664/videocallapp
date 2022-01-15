@@ -6,6 +6,7 @@ const cors = require('cors');
 
 
 app.use(cors())
+AWS.config.credentials = new AWS.Credentials("AKIASPQC4ML3JGSD5NHI", "v4qCGJoUozdZL/HK2Y0JgnhCiT65j8b4RM8OOjDN");
 const chime = new AWS.Chime({ region: 'us-east-1' });
 chime.endpoint = new AWS.Endpoint('https://service.chime.aws.amazon.com/console');
 
