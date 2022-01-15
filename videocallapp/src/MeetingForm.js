@@ -115,8 +115,9 @@ function MeetingForm() {
 
         <div className="row col-md-8 offset-md-2 mt-5">
           <button className="w-75 " onClick={handleStartMeeting} type="button">Start Meeting</button>
-
-         <Link to='/meetings'><button disabled={!disable} className="w-50 col-md-8 offset-md-2 mt-3" type='button'>Join</button></Link> 
+          <nav>
+         <Link to="/meetings"><button disabled={!disable} className="w-50 col-md-8 offset-md-2 mt-3">Join</button></Link> 
+         </nav>
         </div>
         {/* <div className="offset-md-2 mt-5">
           <video ref={videoElement1}></video>
