@@ -10,7 +10,8 @@ function MeetingForm() {
   const [disable, setDisable] = useState(false)
   const [title, setTitle] = useState("")
   const [name, setName] = useState("")
-  const attendeeVideo = useRef()
+  const videoElement1 = useRef()
+  const videoElement2 = useRef()
 
   const handleStartMeeting = async () => {
       const response = await axios.get(`/createmetting/${title}/${name}`)
@@ -44,14 +45,43 @@ function MeetingForm() {
 
       meetingSession.audioVideo.bindAudioElement(audioElement.current);
 
+      
+
+
+      const videoElements = [videoElement.current, videoElement1.current, videoElement2.current]
+      const indexMap = {};
+      const acquireVideoElement = tileId => {
+        for(let i= 0; i < 25; i++) {
+          if (indexMap[i] === tileId) {
+            return videoElements[i];
+          }
+        }
+
+        for (let i = 0; i < 25; i += 1) {
+          if (!indexMap.hasOwnProperty(i)) {
+            indexMap[i] = tileId;
+            return videoElements[i];
+          }
+        }
+        throw new Error('no video element is available');
+      }
+
       const observer = {
         audioVideoDidStart: () => {
           meetingSession.audioVideo.startLocalVideoTile()
         },
         videoTileDidUpdate: tileState => {
-          meetingSession.audioVideo.bindVideoElement(tileState.tileId, videoElement.current);
+          meetingSession.audioVideo.bindVideoElement(tileState.tileId, acquireVideoElement(tileState.tileId))
         }
       };
+
+
+      const videoSources = meetingSession.audioVideo.getRemoteVideoSources()
+      videoSources.forEach(videoSource => {
+        const { attendee } = videoSource;
+        console.log(`An attendee (${attendee.attendeeId} ${attendee.externalUserId}) is sending video`);
+      
+      });
         console.log(observer.videoTileDidUpdate)
       meetingSession.audioVideo.addObserver(observer);
       const audioVideo = meetingSession.audioVideo;
@@ -89,8 +119,9 @@ function MeetingForm() {
           <button disabled={!disable} className="w-50 col-md-8 offset-md-2 mt-3" onClick={handleJoinMeeting} type='button'>Join</button>
         </div>
         <div className="offset-md-2 mt-5">
-          <video ref={attendeeVideo}></video>
+          <video ref={videoElement1}></video>
           <video ref={videoElement}></video>
+          <video ref={videoElement2}></video>
         </div>
       </div>
     </div>
