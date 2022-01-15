@@ -14,7 +14,7 @@ function MeetingForm() {
   const videoElement2 = useRef()
 
   const handleStartMeeting = async () => {
-      const response = await axios.get(`/createmetting/${title}/${name}`)
+      const response = await axios.get(`http://localhost:4000/createmetting/${title}/${name}`)
       .then(response => {
           setMeetingResponse(response.data.JoinInfo.Meeting)
           setAttendeeResponse(response.data.JoinInfo.Attendee)
@@ -67,9 +67,9 @@ function MeetingForm() {
       }
 
       const observer = {
-        audioVideoDidStart: () => {
-          meetingSession.audioVideo.startLocalVideoTile()
-        },
+        // audioVideoDidStart: () => {
+        //   meetingSession.audioVideo.startLocalVideoTile()
+        // },
         videoTileDidUpdate: tileState => {
           meetingSession.audioVideo.bindVideoElement(tileState.tileId, acquireVideoElement(tileState.tileId))
         }
