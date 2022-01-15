@@ -13,7 +13,7 @@ chime.endpoint = new AWS.Endpoint('https://service.chime.aws.amazon.com/console'
 const meetingCache = {}
 const attendeeCache = {}
 let a = []
-
+let data
 app.get('/createmetting/:title/:name',cors(), async (req, res) => {
   console.log("api called")
   const title = req.params.title;
@@ -50,13 +50,18 @@ app.get('/createmetting/:title/:name',cors(), async (req, res) => {
 
     console.log(joinInfo.JoinInfo.Meeting ,joinInfo.JoinInfo.Attendee)
     attendeeCache[title][joinInfo.JoinInfo.Attendee.AttendeeId] = name;
-    
+    data = joinInfo
     res.send(joinInfo)
 }
     catch (err) {
         console.log(err)
     }
     
+})
+
+app.get('/meeting', (req, res) => {
+  console.log(data)
+  res.send(data)
 })
 const port = process.env.PORT || 4000
 if(process.env.NODE_ENV === 'production') {
