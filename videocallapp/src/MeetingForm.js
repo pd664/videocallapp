@@ -10,9 +10,10 @@ function MeetingForm() {
   const [disable, setDisable] = useState(false)
   const [title, setTitle] = useState("")
   const [name, setName] = useState("")
+  const attendeeVideo = useRef()
 
   const handleStartMeeting = async () => {
-      const response = await axios.get(`/createmetting/${title}/${name}`)
+      const response = await axios.get(`http://localhost:4000/createmetting/${title}/${name}`)
       .then(response => {
           setMeetingResponse(response.data.JoinInfo.Meeting)
           setAttendeeResponse(response.data.JoinInfo.Attendee)
@@ -51,11 +52,11 @@ function MeetingForm() {
           meetingSession.audioVideo.bindVideoElement(tileState.tileId, videoElement.current);
         }
       };
-        
+        console.log(observer.videoTileDidUpdate)
       meetingSession.audioVideo.addObserver(observer);
       const audioVideo = meetingSession.audioVideo;
       audioVideo.addDeviceChangeObserver(this);
-  
+      meetingSession.audioVideo.startLocalVideoTile()
       console.log("meeting started")
       meetingSession.audioVideo.start();
   }
@@ -88,6 +89,7 @@ function MeetingForm() {
           <button disabled={!disable} className="w-50 col-md-8 offset-md-2 mt-3" onClick={handleJoinMeeting} type='button'>Join</button>
         </div>
         <div className="offset-md-2 mt-5">
+          <video ref={attendeeVideo}></video>
           <video ref={videoElement}></video>
         </div>
       </div>
