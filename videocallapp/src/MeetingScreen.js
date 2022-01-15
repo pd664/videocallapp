@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import * as Chime from 'amazon-chime-sdk-js';
-import { Link } from 'react-router-dom'
+
 import axios from 'axios';
 
 function MeetingScreen(props) {
